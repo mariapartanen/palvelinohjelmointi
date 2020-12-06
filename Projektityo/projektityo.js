@@ -2,6 +2,21 @@ const container = document.querySelector('.container');
 var inputValue = document.querySelector('.input');
 const add = document.querySelector('.add');
 
+/* Testausta 6.12. kuinka saada toimimaan 3000 portissa.
+var express = require("express");
+ var app = express();
+
+ app.get("/", function(req,res){
+     res.send("");
+ })
+
+
+ app.listen(3000,function(){
+     console.log("Listening to port 3000");
+ })
+*/
+
+// 6.12. En tiedä vielä kuinka saada tiedot tallennettua tietokantaan
 // Tallennetaan tuotteet/tehtävät paikalliselle levylle
 if(window.localStorage.getItem("items") == undefined){
      var items = [];
