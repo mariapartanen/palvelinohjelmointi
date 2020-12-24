@@ -1,11 +1,16 @@
+
 // 13.12. 
+// Otetaan mongodb käyttöön
+const mongodb = require('mongodb');
 //Otetaan Mongoose käyttöön
 const mongoose = require('mongoose');
+// Otetaan BodyParser käyttöön
+const bodyparser = require('body-parser');
 // Otetaan Express käyttöön
 express = require('express');
 const app = express();
 // Otetaan items käyttöön
-const item = require('./item')
+const item = require('./item');
 // Luodaan connectionstringille vakio
 const uri = 'mongodb+srv://partmaria:M94rtan3N@cluster0.haiqj.mongodb.net/projektityodb?retryWrites=true&w=majority';
 // Muodostetaan yhteys tietokantaan
@@ -17,17 +22,44 @@ const db = mongoose.connection;
 db.once('open', function() {
     console.log ('Tietokantayhteys avattu');
 });
-
+// Asetetaan määritykset express-palvelimelle
+//Määritetään staattisten tiedostojen hakemisto
+app.use(express.static('public'));
+// Käytetään bodyparseria datan käsittelyssä
+app.use(bodyparser.urlencoded( { extended: false }));
 // Kirjoitetaan get-funktio
 app.get('/items', function(req, res) {
     // Haetaan itemsit tietokannasta
-    item.find({ }, function( err, result) {
+    item.find( { }, function( err, result) {
         if ( err ){
             res.send(err);
         } else {
             res.send(result);
         }
     })
+});
+// Itemsin lisäys post-funktio
+app.post('/projektityo.html', function (req, res) {
+    console.log(req.body);
+    // Varmuuden vuoksi poistetaan _id
+    delete req.body._id;
+    // Lisätään collectioniin uusi items
+    db.collection('items').insertOne(req.body);
+    res.send(JSON.stringify(req.body) + 'succesfully added');
+});
+// Itemsin poistaminen post-funktio
+app.post('/deleteItem', function (req, res) {
+    console.log(req.body);
+    // Varmuuden vuoksi poistetaan _id
+    delete req.body._id;
+    // Poistetaan collectionista items id:n perusteella
+    db.collection('items').deleteOne({ _id: new mongodb.ObjectID(req.body._id) }, function( err, results) {
+    if (err ) {
+        res.send(JSON.stringify(req.body) + 'Error deleting');
+    } else {
+        res.send(JSON.stringify(req.body) + 'Succesfully deleted');
+    }
+    });
 });
 // Laitetaan palvelin kuuntelemaan porttia 1234
 const server = app.listen(1234, function(){});
@@ -79,11 +111,11 @@ const server = http.createServer((req, res) => {
     });
 });
 
+
 server.listen(1234, "localhost", () => {
     console.log("Listening on port 1234");
 });
-/*
-
+*/
 
 
 // 12.12 

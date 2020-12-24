@@ -1,8 +1,58 @@
+
+// 13.12. Tietojen näyttäminen
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.open("GET", "/items", true);
+xmlhttp.send();
+
+xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState === 4 && xmlhttp.status === 200){
+        let items = JSON.parse(xmlhttp.response);
+        // Luodaan rivit, jossa itemsit näytetään
+        // Luodaan silmukka, jossa käydään itemsit läpi
+        let table = document.createElement('table');
+        for (let i = 0; i < items.length; i++ ) {
+            let newRow = document.createElement('tr');
+            
+            newRow.appendChild(createCell(items[i]._id));
+
+            table.appendChild(newRow);
+        }
+        document.getElementById("list").appendChild(table);
+    }
+}
+function createCell(value) {
+newCell.innerHTML = value;
+return newCell;
+}
+
+function createForm(id) {
+    let newCell = document.createElement('td');
+    let form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '/deleteItem';
+    // Lisätään piilokenttä id:lle
+    let input = document.createElement('input');
+    input.value = id;
+    input.type = 'hidden';
+    input.name = 'id_';
+    form.appendChild(input);
+    // Lisätään painike
+    input = document.createElement('input');
+    input.type = 'submit';
+    input.value = 'Delete item';
+    form.appendChild(input);
+    newCell.appendChild(form);
+    return newCell;
+}
+// 6.12. Sain tämän toimimaan tällaisenaan hyvin ,jos ei tarvitsisi käyttää tietokantayhteyttä,
+// tallentaa tiedot paikalliselle levylle
+/*
 const container = document.querySelector('.container');
 var inputValue = document.querySelector('.input');
 const add = document.querySelector('.add');
 
-// 6.12. En tiedä vielä kuinka saada tiedot tallennettua tietokantaan
+
+
 // Tallennetaan tuotteet/tehtävät paikalliselle levylle
 if(window.localStorage.getItem("items") == undefined){
      var items = [];
@@ -39,6 +89,7 @@ class item{
 
         // Luodaan muuttuja, poista-painike
         // Tehdään painikkeelle tapahtumankäsittely (klikkauksesta) 
+        // Luodaan tapahtumankäsittely muokkaa ja poista -painikkeille
     	var remove = document.createElement('button');
     	remove.classList.add('remove');
     	remove.innerHTML = "REMOVE";
@@ -94,4 +145,4 @@ for (var v = 0 ; v < items.length ; v++){
     new item(items[v]);
 }
 
-
+*/

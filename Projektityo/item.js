@@ -11,4 +11,4 @@ let item = new Schema ( {
     { collection: 'items'}
 );
 // Tarjoa pääsy tähän
-module.exports = mongoose.model('items', item)
+module.exports = mongoose.model('items', item);
